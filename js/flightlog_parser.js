@@ -806,37 +806,86 @@ var FlightLogParser = function(logData) {
                     var expoParams = parseCommaSeparatedString(fieldValue);
                     that.sysConfig.superExpoFactor    = expoParams[0];
                     that.sysConfig.superExpoFactorYaw = expoParams[1];
-
                 } else {
                     that.sysConfig.superExpoFactor = parseInt(fieldValue, 10);
                 }
             break;
 
             /* CSV packed values */
+
             case "rates":
+                that.sysConfig[fieldName] = parseCommaSeparatedString(fieldValue);
+            break;
             case "rate_limits":
+                that.sysConfig[fieldName] = parseCommaSeparatedString(fieldValue);
+            break;
+
             case "rollPID":
+                that.sysConfig[fieldName] = parseCommaSeparatedString(fieldValue);
+            break;
             case "pitchPID":
+                that.sysConfig[fieldName] = parseCommaSeparatedString(fieldValue);
+            break;
             case "yawPID":
+                that.sysConfig[fieldName] = parseCommaSeparatedString(fieldValue);
+            break;
+
             case "altPID":
+                that.sysConfig[fieldName] = parseCommaSeparatedString(fieldValue);
+            break;
             case "posPID":
+                that.sysConfig[fieldName] = parseCommaSeparatedString(fieldValue);
+            break;
             case "posrPID":
+                that.sysConfig[fieldName] = parseCommaSeparatedString(fieldValue);
+            break;
             case "navrPID":
+                that.sysConfig[fieldName] = parseCommaSeparatedString(fieldValue);
+            break;
+
             case "levelPID":
+                that.sysConfig[fieldName] = parseCommaSeparatedString(fieldValue);
+            break;
             case "velPID":
-            case "motorOutput":
-            case "rate_limits":
-            case "rc_smoothing_cutoffs":
-            case "rc_smoothing_active_cutoffs":
-            case "rc_smoothing_active_cutoffs_ff_sp_thr":
-            case "gyro_lowpass_dyn_hz":
-            case "dterm_lpf_dyn_hz":
-            case "d_min":
                 that.sysConfig[fieldName] = parseCommaSeparatedString(fieldValue);
             break;
             case "magPID":
                 that.sysConfig.magPID = parseCommaSeparatedString(fieldValue,3); //[parseInt(fieldValue, 10), null, null];
             break;
+
+            case "motorOutput":
+                that.sysConfig[fieldName] = parseCommaSeparatedString(fieldValue);
+            break;
+
+            case "rate_limits":
+                that.sysConfig[fieldName] = parseCommaSeparatedString(fieldValue);
+            break;
+
+            case "rc_smoothing_cutoffs":
+                that.sysConfig[fieldName] = parseCommaSeparatedString(fieldValue);
+            break;
+            case "rc_smoothing_active_cutoffs":
+                that.sysConfig[fieldName] = parseCommaSeparatedString(fieldValue);
+            break;
+            case "rc_smoothing_active_cutoffs_ff_sp_thr":
+                that.sysConfig[fieldName] = parseCommaSeparatedString(fieldValue);
+            break;
+
+            case "gyro_lowpass_dyn_hz":
+                that.sysConfig[fieldName] = parseCommaSeparatedString(fieldValue);
+            break;
+            case "dterm_lpf_dyn_hz":
+                that.sysConfig[fieldName] = parseCommaSeparatedString(fieldValue);
+            break;
+
+            case "d_min":
+                 that.sysConfig[fieldName] = parseCommaSeparatedString(fieldValue);
+                 var dMinValues = parseCommaSeparatedString(fieldValue);
+                 that.sysConfig["rollPID"].push(dMinValues[0]);
+                 that.sysConfig["pitchPID"].push(dMinValues[1]);
+                 that.sysConfig["yawPID"].push(dMinValues[2]);
+            break;
+
             case "ff_weight":
                 // Add it to the end of the rollPID, pitchPID and yawPID
                 var ffValues = parseCommaSeparatedString(fieldValue);
@@ -844,11 +893,11 @@ var FlightLogParser = function(logData) {
                 that.sysConfig["pitchPID"].push(ffValues[1]);
                 that.sysConfig["yawPID"].push(ffValues[2]);
             break;
+
             /* End of CSV packed values */
 
             case "vbatcellvoltage":
                 var vbatcellvoltageParams = parseCommaSeparatedString(fieldValue);
-
                 that.sysConfig.vbatmincellvoltage = vbatcellvoltageParams[0];
                 that.sysConfig.vbatwarningcellvoltage = vbatcellvoltageParams[1];
                 that.sysConfig.vbatmaxcellvoltage = vbatcellvoltageParams[2];
@@ -856,14 +905,12 @@ var FlightLogParser = function(logData) {
             case "currentMeter":
             case "currentSensor":
                 var currentMeterParams = parseCommaSeparatedString(fieldValue);
-
                 that.sysConfig.currentMeterOffset = currentMeterParams[0];
                 that.sysConfig.currentMeterScale = currentMeterParams[1];
             break;
             case "gyro.scale":
             case "gyro_scale":
                     that.sysConfig.gyroScale = hexToFloat(fieldValue);
-
                     /* Baseflight uses a gyroScale that'll give radians per microsecond as output, whereas Cleanflight produces degrees
                      * per second and leaves the conversion to radians per us to the IMU. Let's just convert Cleanflight's scale to
                      * match Baseflight so we can use Baseflight's IMU for both: */
