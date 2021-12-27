@@ -608,9 +608,86 @@ GraphConfig.load = function(config) {
                                     inputRange: 1000,
                                     outputRange: 1.0,
                                 };
-                        }
-                        break;
-                 }
+                            }
+                            break;
+                    case 'RX_TIMING':
+                        switch (fieldName) {
+                            case 'debug[0]': // CRC 0 to max int16_t
+                                return getCurveForMinMaxFieldsZeroOffset(fieldName);
+                            case 'debug[1]': // Count of Unknown Frames
+                                return getCurveForMinMaxFieldsZeroOffset(fieldName);
+                            case 'debug[2]': // not used
+                            case 'debug[3]': // not used
+                            }
+                            break;
+                    case 'GHST':
+                        switch (fieldName) {
+                            case 'debug[0]': // CRC 0 to max int16_t
+                                return getCurveForMinMaxFieldsZeroOffset(fieldName);
+                            case 'debug[1]': // Count of Unknown Frames
+                                return getCurveForMinMaxFieldsZeroOffset(fieldName);
+                            case 'debug[2]': // RSSI
+                                return {
+                                    offset: 128,
+                                    power: 1.0,
+                                    inputRange: 128,
+                                    outputRange: 1.0,
+                                };
+                            case 'debug[3]': // LQ percent
+                                return {
+                                    offset: -100,
+                                    power: 1.0,
+                                    inputRange: 100,
+                                    outputRange: 1.0,
+                                };
+                            }
+                            break;
+                    case 'SCHEDULER_DETERMINISM':
+                        switch (fieldName) {
+                            case 'debug[0]': // Gyro task cycle us * 10
+                                return getCurveForMinMaxFieldsZeroOffset(fieldName);
+                            case 'debug[1]': // ID of late task
+                                return getCurveForMinMaxFieldsZeroOffset(fieldName);
+                            case 'debug[2]': // total lateness in last second
+                                return getCurveForMinMaxFieldsZeroOffset(fieldName);
+                            case 'debug[3]': // tasks run in last second around 5000
+                            }
+                            break;
+                    case 'TIMING_ACCURACY':
+                        switch (fieldName) {
+                            case 'debug[0]': // % CPU Busy
+                                return {
+                                    offset: -100,
+                                    power: 1.0,
+                                    inputRange: 100,
+                                    outputRange: 1.0,
+                                };
+                            case 'debug[1]': // tasks late in last second
+                                return getCurveForMinMaxFieldsZeroOffset(fieldName);
+                            case 'debug[2]': // total lateness in last second
+                                return getCurveForMinMaxFieldsZeroOffset(fieldName);
+                            case 'debug[3]': // tasks run in last second around 5000
+                                return getCurveForMinMaxFieldsZeroOffset(fieldName);
+                            }
+                            break;
+                    case 'RX_EXPRESSLRS_PHASELOCK':
+                        switch (fieldName) {
+                            case 'debug[0]': // % CPU Busy
+                                return {
+                                    offset: -100,
+                                    power: 1.0,
+                                    inputRange: 100,
+                                    outputRange: 1.0,
+                                };
+                            case 'debug[1]': // tasks late in last second
+                                return getCurveForMinMaxFieldsZeroOffset(fieldName);
+                            case 'debug[2]': // total lateness in last second
+                                return getCurveForMinMaxFieldsZeroOffset(fieldName);
+                            case 'debug[3]': // tasks run in last second around 5000
+                                return getCurveForMinMaxFieldsZeroOffset(fieldName);
+                            }
+                            break;
+                    }
             }
             // if not found above then
             // Scale and center the field based on the whole-log observed ranges for that field
